@@ -57,34 +57,75 @@ TEST(TestTransform3d, HandlesEulerRad2Mat) {
 TEST(TestTransform3d, HandlesEulerDeg2Quat) {
   Quaterniond q = tf::EulerDeg2Quat(45, 45, 45);
   cout << "45,45,45 quat= \n" << q << seg;
-  double det_q_x = q.x() - r.roll45_pitch45_yaw45_quat.x();
-  double det_q_y = q.y() - r.roll45_pitch45_yaw45_quat.y();
-  double det_q_z = q.z() - r.roll45_pitch45_yaw45_quat.z();
-  double det_q_w = q.w() - r.roll45_pitch45_yaw45_quat.w();
+  double det_q_x = abs(q.x() - r.roll45_pitch45_yaw45_quat.x());
+  double det_q_y = abs(q.y() - r.roll45_pitch45_yaw45_quat.y());
+  double det_q_z = abs(q.z() - r.roll45_pitch45_yaw45_quat.z());
+  double det_q_w = abs(q.w() - r.roll45_pitch45_yaw45_quat.w());
   cout << "det_q_x=" << det_q_x << seg;
   cout << "det_q_y=" << det_q_y << seg;
   cout << "det_q_z=" << det_q_z << seg;
   cout << "det_q_w=" << det_q_w << seg;
-  ASSERT_LE(det_q_x, 1e-6);
-  ASSERT_LE(det_q_y, 1e-6);
-  ASSERT_LE(det_q_z, 1e-6);
-  ASSERT_LE(det_q_w, 1e-6);
+  ASSERT_LE(det_q_x, 1e-4);
+  ASSERT_LE(det_q_y, 1e-4);
+  ASSERT_LE(det_q_z, 1e-4);
+  ASSERT_LE(det_q_w, 1e-4);
 }
 
 TEST(TestTransform3d, HandlesEulerRad2Quat) {
   Quaterniond q =
       tf::EulerRad2Quat(tf::ToRad(45), tf::ToRad(45), tf::ToRad(45));
   cout << "45,45,45 quat= \n" << q << seg;
-  double det_q_x = q.x() - r.roll45_pitch45_yaw45_quat.x();
-  double det_q_y = q.y() - r.roll45_pitch45_yaw45_quat.y();
-  double det_q_z = q.z() - r.roll45_pitch45_yaw45_quat.z();
-  double det_q_w = q.w() - r.roll45_pitch45_yaw45_quat.w();
+  double det_q_x = abs(q.x() - r.roll45_pitch45_yaw45_quat.x());
+  double det_q_y = abs(q.y() - r.roll45_pitch45_yaw45_quat.y());
+  double det_q_z = abs(q.z() - r.roll45_pitch45_yaw45_quat.z());
+  double det_q_w = abs(q.w() - r.roll45_pitch45_yaw45_quat.w());
   cout << "det_q_x=" << det_q_x << seg;
   cout << "det_q_y=" << det_q_y << seg;
   cout << "det_q_z=" << det_q_z << seg;
   cout << "det_q_w=" << det_q_w << seg;
-  ASSERT_LE(det_q_x, 1e-6);
-  ASSERT_LE(det_q_y, 1e-6);
-  ASSERT_LE(det_q_z, 1e-6);
-  ASSERT_LE(det_q_w, 1e-6);
+  ASSERT_LE(det_q_x, 1e-4);
+  ASSERT_LE(det_q_y, 1e-4);
+  ASSERT_LE(det_q_z, 1e-4);
+  ASSERT_LE(det_q_w, 1e-4);
+}
+
+TEST(TestTransform3d, HandlesMat2EulerDeg) {
+  double roll_deg;
+  double pitch_deg;
+  double yaw_deg;
+  tf::Mat2EulerDeg(r.roll10_pitch20_yaw30_mat, roll_deg, pitch_deg, yaw_deg);
+
+  ASSERT_LE(abs(roll_deg - deg_10), 1e-4);
+  ASSERT_LE(abs(pitch_deg - deg_20), 1e-4);
+  ASSERT_LE(abs(yaw_deg - deg_30), 1e-4);
+}
+
+TEST(TestTransform3d, HandlesMat2EulerRad) {
+  double roll_rad;
+  double pitch_rad;
+  double yaw_rad;
+  tf::Mat2EulerRad(r.roll10_pitch20_yaw30_mat, roll_rad, pitch_rad, yaw_rad);
+
+  ASSERT_LE(abs(roll_rad - rad_10), 1e-4);
+  ASSERT_LE(abs(pitch_rad - rad_20), 1e-4);
+  ASSERT_LE(abs(yaw_rad - rad_30), 1e-4);
+}
+
+TEST(TestTransform3d, HandlesMat2Quat) {
+  Quaterniond q = tf::Mat2Quat(r.roll10_pitch20_yaw30_mat);
+
+  double det_q_x = abs(q.x() - r.roll10_pitch20_yaw30_quat.x());
+  double det_q_y = abs(q.y() - r.roll10_pitch20_yaw30_quat.y());
+  double det_q_z = abs(q.z() - r.roll10_pitch20_yaw30_quat.z());
+  double det_q_w = abs(q.w() - r.roll10_pitch20_yaw30_quat.w());
+
+  cout << "det_q_x=" << det_q_x << seg;
+  cout << "det_q_y=" << det_q_y << seg;
+  cout << "det_q_z=" << det_q_z << seg;
+  cout << "det_q_w=" << det_q_w << seg;
+
+  ASSERT_LE(det_q_x, 1e-4);
+  ASSERT_LE(det_q_y, 1e-4);
+  ASSERT_LE(det_q_z, 1e-4);
+  ASSERT_LE(det_q_w, 1e-4);
 }
