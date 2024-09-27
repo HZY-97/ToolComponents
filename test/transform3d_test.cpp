@@ -12,6 +12,7 @@
 
 #include <gtest/gtest.h>
 
+#include "Eigen/src/Geometry/Quaternion.h"
 #include "share_data_test.hpp"
 TEST(TestTransform3d, HandlesToDeg) {
   double toDeg = tf::ToDeg(rad_45);
@@ -41,7 +42,6 @@ TEST(TestTransform3d, HandlesEulerDeg2Mat) {
 }
 
 TEST(TestTransform3d, HandlesEulerRad2Mat) {
-  Rot3d r;
   Matrix3d rad_mat =
       tf::EulerRad2Mat(tf::ToRad(45), tf::ToRad(45), tf::ToRad(45));
   cout << "45,45,45 rad_mat= \n" << rad_mat << seg;
@@ -52,4 +52,39 @@ TEST(TestTransform3d, HandlesEulerRad2Mat) {
       ASSERT_LE(std::abs(ret(i, j)), 1e-4);
     }
   }
+}
+
+TEST(TestTransform3d, HandlesEulerDeg2Quat) {
+  Quaterniond q = tf::EulerDeg2Quat(45, 45, 45);
+  cout << "45,45,45 quat= \n" << q << seg;
+  double det_q_x = q.x() - r.roll45_pitch45_yaw45_quat.x();
+  double det_q_y = q.y() - r.roll45_pitch45_yaw45_quat.y();
+  double det_q_z = q.z() - r.roll45_pitch45_yaw45_quat.z();
+  double det_q_w = q.w() - r.roll45_pitch45_yaw45_quat.w();
+  cout << "det_q_x=" << det_q_x << seg;
+  cout << "det_q_y=" << det_q_y << seg;
+  cout << "det_q_z=" << det_q_z << seg;
+  cout << "det_q_w=" << det_q_w << seg;
+  ASSERT_LE(det_q_x, 1e-6);
+  ASSERT_LE(det_q_y, 1e-6);
+  ASSERT_LE(det_q_z, 1e-6);
+  ASSERT_LE(det_q_w, 1e-6);
+}
+
+TEST(TestTransform3d, HandlesEulerRad2Quat) {
+  Quaterniond q =
+      tf::EulerRad2Quat(tf::ToRad(45), tf::ToRad(45), tf::ToRad(45));
+  cout << "45,45,45 quat= \n" << q << seg;
+  double det_q_x = q.x() - r.roll45_pitch45_yaw45_quat.x();
+  double det_q_y = q.y() - r.roll45_pitch45_yaw45_quat.y();
+  double det_q_z = q.z() - r.roll45_pitch45_yaw45_quat.z();
+  double det_q_w = q.w() - r.roll45_pitch45_yaw45_quat.w();
+  cout << "det_q_x=" << det_q_x << seg;
+  cout << "det_q_y=" << det_q_y << seg;
+  cout << "det_q_z=" << det_q_z << seg;
+  cout << "det_q_w=" << det_q_w << seg;
+  ASSERT_LE(det_q_x, 1e-6);
+  ASSERT_LE(det_q_y, 1e-6);
+  ASSERT_LE(det_q_z, 1e-6);
+  ASSERT_LE(det_q_w, 1e-6);
 }
