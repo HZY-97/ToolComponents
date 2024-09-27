@@ -1,0 +1,38 @@
+cmake_minimum_required(VERSION 3.5.0)
+project(transform3d LANGUAGES C CXX)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+set(${PROJECT_NAME}_MAJOR_VERSION 0)
+set(${PROJECT_NAME}_MINOR_VERSION 0)
+set(${PROJECT_NAME}_PATCH_VERSION 1)
+set(${PROJECT_NAME}_VERSION
+  ${${PROJECT_NAME}_MAJOR_VERSION}.${${PROJECT_NAME}_MINOR_VERSION}.${${PROJECT_NAME}_PATCH_VERSION})
+
+message("VERSION:v${${PROJECT_NAME}_VERSION}")
+
+option(USE_TEST "build test" ON)
+
+set(LIB_TOOL_COMPONENT tool_components)
+
+find_package(Eigen3 REQUIRED)
+
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${EIGEN3_INCLUDE_DIR}
+)
+
+aux_source_directory(${PROJECT_SOURCE_DIR}/transform3d LIB_TRANSFORM3D_SRC)
+
+set(LIB_TOOLCOMPONENTS_SRC
+  ${LIB_TRANSFORM3D_SRC}
+)
+
+add_library(${LIB_TOOL_COMPONENT} SHARED ${LIB_TOOLCOMPONENTS_SRC})
+
+
+if(USE_TEST)
+  include(CTest)
+  add_subdirectory(${PROJECT_SOURCE_DIR}/test)
+endif()
+
